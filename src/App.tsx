@@ -126,15 +126,52 @@ function App() {
     setTodos([...todos]);
   };
 
-  const handleToggleTodoServer = (todo: Todo) => {
-    todo.completed = !todo.completed;
-    setTodos([...todos]);
+  const handleToggleTodoServer = async (todo: Todo) => {
+
+  try{
+
+      await TodosAPI.updateTodo(todo.id,       {
+         completed:!todo.completed
+        }
+      );
+      await getTodos()
+
+    }
+    catch(err)
+    {
+ console.error("Error throw when deleting todos:"+todo.id, error);
+      setError(
+        err instanceof Error
+          ? `Could not delete todos : ${todo.id}+ ${err.message}`
+          : "It's not me ,it's you",
+      );
+    }
+
+
+
   };
   const handleDeleteTodo = (todo: Todo) => {
     setTodos(todos.filter((td) => td.id !== todo.id));
   };
-  const handleDeleteTodoServer = (todo: Todo) => {
-    setTodos(todos.filter((td) => td.id !== todo.id));
+
+
+  const handleDeleteTodoServer = async (todo: Todo) => {
+    
+    try{
+
+      await TodosAPI.deleteTodo(todo.id);
+      await getTodos()
+
+    }
+    catch(err)
+    {
+ console.error("Error throw when deleting todos:"+todo.id, error);
+      setError(
+        err instanceof Error
+          ? `Could not delete todos : ${todo.id}+ ${err.message}`
+          : "It's not me ,it's you",
+      );
+    }
   };
   //DERIVE LIST OF COMPLETED  /INCOMPLETE TODOS
 
@@ -205,8 +242,8 @@ function App() {
               ))}
             </ListGroup> */}
               <Todolist
-                onDelete={handleDeleteTodo}
-                onToggle={handleToggleTodo}
+                onDelete={handleDeleteTodoServer}
+                onToggle={handleToggleTodoServer}
                 todos={incompletedtodos}
               />
 
@@ -224,8 +261,8 @@ function App() {
             </ListGroup> */}
 
               <Todolist
-                onDelete={handleDeleteTodo}
-                onToggle={handleToggleTodo}
+                onDelete={handleDeleteTodoServer}
+                onToggle={handleToggleTodoServer}
                 todos={completedtodos}
               />
 

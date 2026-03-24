@@ -7,6 +7,7 @@ import type { CreateTodoPayload } from "./../types/Todo.types";
 
 import axios from "axios";
 import type { Todo } from "../types/Todo.types";
+import type { UpdatePayload } from "vite/types/hmrPayload.js";
 
 const BASE_URL = "http://localhost:3000";
 
@@ -51,3 +52,24 @@ fetch(BASE_URL + "/todos", {
   },
   body: JSON.stringify(newTodo),
 });
+
+/**
+ *
+ * Delete todo
+ * IT is different from the example in the lecture
+ */
+export const deleteTodo = async (id:number) => {
+  const res = await axios.delete<Todo>(`${BASE_URL}/todos/${id}`);
+  return res.data;
+};
+
+
+/**
+ *
+ * Update todo
+ * IT is different from the example in the lecture
+ */
+export const updateTodo = async (id:number,payload:UpdatePayload) => {
+  const res = await axios.patch<Todo>(`${BASE_URL}/todos/${id}`,payload);
+  return res.data;
+};

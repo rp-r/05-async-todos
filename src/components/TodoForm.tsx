@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import { InputGroup } from "react-bootstrap";
 import { Form } from "react-bootstrap";
@@ -10,6 +10,8 @@ interface TodoFormProps {
 const TodoForm: React.FC<TodoFormProps> = ({ onhandleAdd }) => {
   const [inputtodotitle, setInputtodotitle] = useState("");
   const trimmedinputtodotitle = inputtodotitle.trim();
+
+  const inputTodoTitleRef=useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -29,7 +31,25 @@ const TodoForm: React.FC<TodoFormProps> = ({ onhandleAdd }) => {
     //TELL THE PARENT SOME ONE
 
     setInputtodotitle("");
+    inputTodoTitleRef.current?.focus();
   };
+useEffect(()=>{
+
+  //FOUCS ON INPUT ELEMENT AFTER SUBMIT
+ /**
+  if(!inputTodoTitleRef.current)
+  {
+    return;
+  }
+  inputTodoTitleRef.current.focus();
+
+ 
+   * 
+
+
+   */
+  inputTodoTitleRef.current?.focus();
+},[])
 
   return (
     <>
@@ -40,6 +60,8 @@ const TodoForm: React.FC<TodoFormProps> = ({ onhandleAdd }) => {
             aria-label="New todo title"
             onChange={(e) => setInputtodotitle(e.target.value)}
             value={inputtodotitle}
+            /// <reference path="" />
+            ref={inputTodoTitleRef}            
             placeholder="learn abour GTD"
             required
           />
